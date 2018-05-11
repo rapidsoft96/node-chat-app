@@ -14,6 +14,17 @@ var io=socketIO(server); //communicating
 app.use(express.static(publicPath));
 io.on('connection',(socket)=>{ //individual socket, client
   console.log('New user connected');
+
+  socket.emit('newMessage',{
+    from: 'Admin',
+    text: 'Welcome to the chat app',
+    createdAt: new Date().getTime()
+  });
+  socket.broadcast.emit('newMessage',{
+    from: 'Admin',
+    text:'New user joined',
+    createdAt: new Date().getTime()
+  });
 //socket.emit - singe connection
 //io.emit - EVERY single connection
     socket.on('createMessage',(newMessage)=>{
@@ -23,6 +34,9 @@ io.on('connection',(socket)=>{ //individual socket, client
       text:newMessage.text,
       createdAt: new Date().getTime()
     });
+    // socket.broadcast.emit('newMessage',{
+    //
+    // });
   });
 
   socket.on('disconnect',()=>{
