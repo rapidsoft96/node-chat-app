@@ -14,21 +14,15 @@ var io=socketIO(server); //communicating
 app.use(express.static(publicPath));
 io.on('connection',(socket)=>{ //individual socket, client
   console.log('New user connected');
-
-  socket.emit('newEmail',{
-    from:'mike@example.com',
-    text: 'Hey,you suck',
-    createAt: 123
-  }); //creating event
-
-  socket.emit('newMessage',{
-    from:'Zlatko',
-    text: 'jebo te led',
-    createdAt: 123
-  })
-  
-  socket.on('createMessage',(newMessage)=>{
+//socket.emit - singe connection
+//io.emit - EVERY single connection
+    socket.on('createMessage',(newMessage)=>{
     console.log(newMessage);
+    io.emit('newMessage',{
+      from:newMessage.from,
+      text:newMessage.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect',()=>{
