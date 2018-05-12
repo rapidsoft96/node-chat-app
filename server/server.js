@@ -20,9 +20,10 @@ io.on('connection',(socket)=>{ //individual socket, client
   socket.broadcast.emit('newMessage',generateMessage('Admin','New user joined'));
 //socket.emit - singe connection
 //io.emit - EVERY single connection
-    socket.on('createMessage',(newMessage)=>{
+    socket.on('createMessage',(newMessage,callback)=>{
     console.log(newMessage);
     io.emit('newMessage',generateMessage(newMessage.from,newMessage.text));
+    callback('This is from server.');
     // socket.broadcast.emit('newMessage',{
     //
     // });
