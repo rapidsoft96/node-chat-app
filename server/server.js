@@ -6,7 +6,7 @@ const port=process.env.PORT || 3000;
 const publicPath= path.join(__dirname, '../public')
 //join - sluzi za spajanje putanje , kako bi iz servera lako dosli u public, zbog middleware-a koji je komplikovaniji
 
-const {generateMessage}=require('./utils/message');
+const {generateMessage,generateLocationMessage}=require('./utils/message');
 var app=express();
 var server=http.createServer(app);
 var io=socketIO(server); //communicating
@@ -24,9 +24,11 @@ io.on('connection',(socket)=>{ //individual socket, client
     console.log(newMessage);
     io.emit('newMessage',generateMessage(newMessage.from,newMessage.text));
     callback('This is from server.');
-    // socket.broadcast.emit('newMessage',{
-    //
-    // });
+  });
+
+  //Geolocation
+  socket.on('createLocationMessage',(coords)=>{
+    io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
   });
 
   socket.on('disconnect',()=>{
