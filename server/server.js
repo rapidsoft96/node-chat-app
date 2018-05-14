@@ -23,7 +23,7 @@ io.on('connection',(socket)=>{ //individual socket, client
     socket.on('createMessage',(newMessage,callback)=>{
     console.log(newMessage);
     io.emit('newMessage',generateMessage(newMessage.from,newMessage.text));
-    callback('This is from server.');
+    callback();
   });
 
   //Geolocation
